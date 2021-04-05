@@ -7,8 +7,7 @@ public class Tar {
     public Tar() {
     }
 
-    public static void main(String[] argsqwertyu) throws IOException {
-        String[] args = new String[]{"-u", "input/input.txt"};
+    public static void main(String[] args) throws IOException {
         if (args[0].equals("-u")) {
             String a = readFile(args[1]);
             String[] parts = a.split("---");
