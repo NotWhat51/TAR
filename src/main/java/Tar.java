@@ -1,45 +1,52 @@
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Tar {
-    public Tar() {
-    }
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         if (args[0].equals("-u")) {
-            String a = readFile(args[1]);
-            String[] parts = a.split("---");
-            String[] var4 = parts;
-            int var5 = parts.length;
-
-            for(int var6 = 0; var6 < var5; ++var6) {
-                String part = var4[var6];
-                System.out.print("!");
-                System.out.print(part);
+            String[] parts = readFile(args[1]).split("---");
+            int i = 1;
+            for (String part: parts)
+            {
+                writeFile("output" + i + ".txt", part);
+                i++;
             }
         } else {
-            System.out.println(0);
+            String outputName = args[3];
+            String output = readFile(args[0]);
+            int i = 1;
+            while (!args[i].equals("-out")) {
+                output += ("\n---\r" + readFile(args[i]));
+                i++;
+            }
+            writeFile(outputName,output);
         }
-
     }
 
-    public static String readFile(String file) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+    public static void writeFile(String file, String data){
+        try (FileWriter writer = new FileWriter(file, false)){
+            writer.write(data);
+            writer.flush();
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static String readFile(String file){
+        try{
+            FileReader nnn = new FileReader(file);
+            BufferedReader reader = new BufferedReader(nnn);
+            String line;
             StringBuilder stringBuilder = new StringBuilder();
             String ls = System.getProperty("line.separator");
-
-            String line;
             while((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
                 stringBuilder.append(ls);
             }
-
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             return stringBuilder.toString();
-        } catch (Exception var5) {
+        }
+        catch(Exception e){
             return null;
         }
     }
